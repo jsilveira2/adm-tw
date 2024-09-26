@@ -7,20 +7,30 @@ import bcrypt from 'bcrypt';
 
 export class UsersService {
 
-  constructor(private repository: IUsersRepositories) {}
+  constructor(private repository: IUsersRepositories) { }
 
   async findAll(): Promise<Omit<Users, 'password'>[]> {
     return await this.repository.findAll();
   }
 
-  async findById(id: string): Promise<Omit<Users, 'password'>>{
+  async findById(id: string): Promise<Omit<Users, 'password'>> {
     const findUser = await this.repository.findById(id);
 
     if (!findUser) {
       throw new ErrorHelper('User not found', 404);
     }
 
-    return findUser; 
+    return findUser;
+  }
+
+  async findByEmail(email: string): Promise<Users> {
+    const findUser = await this.repository.findByEmail(email);
+
+    if (!findUser) {
+      throw new ErrorHelper('User not found', 404);
+    }
+
+    return findUser;
   }
 
   async create(newUser: User): Promise<Omit<Users, 'password'>> {
@@ -37,8 +47,8 @@ export class UsersService {
     return user;
   }
 
-  async update(user: User): Promise<Omit<Users, 'password'>> {
-    const exists = await this.repository.exists(user.id);
+  async update(id: string, user: User): Promise<Omit<Users, 'password'>> {
+    const exists = await this.repository.exists(id);
 
     if (!exists) {
       throw new ErrorHelper('User not found', 404);
@@ -61,5 +71,25 @@ export class UsersService {
         id,
       },
     });
+  }
+
+  async isValidPassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
+    try {
+      const isMatch = await bcrypt.compare(plainPassword, hashedPassword);
+      return isMatch;
+    } catch (error) {
+      console.error('Error comparing passwords:', error);
+      throw new Error('Internal Server Error');
+    }
+  }
+
+  async login(email: string, password: string): Promise<Omit<Users, 'password'>> {
+    const user = await this.findByEmail(email);
+
+    if (!user || !this.isValidPassword(password, user.password)) {
+      throw new ErrorHelper('Invalid credentials', 404);
+    }
+
+    return user;
   }
 }
