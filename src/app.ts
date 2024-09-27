@@ -2,8 +2,8 @@ import fastify from 'fastify';
 import multipart from '@fastify/multipart';
 import { ErrorControllers } from './middleware/error';
 import { FastifyInstance } from 'fastify/types/instance';
-import { oauth } from './oauth';
 import { config } from 'dotenv';
+import { Users, Login } from './routes/users.routes';
 
 export class App {
     public readonly server: FastifyInstance;
@@ -12,11 +12,53 @@ export class App {
     constructor() {
         this.server = fastify();
 
-        this.server.register(oauth);
         this.server.register(multipart);
 
-        this.errorControllers = new ErrorControllers();
+        this.server.register(require('@fastify/cookie'), {
+            secret: process.env.COOKIE_SECRET || 'supersecretcookie',
+            parseOptions: {}
+        });
 
+        this.server.register(require('@fastify/jwt'), {
+            secret: process.env.JWT_SECRET || 'supersecret'
+        });
+
+        this.server.addHook('preValidation', async (req, reply) => {
+            const { url } = req.raw;
+        
+            if (url === '/login' || url === '/logout') {
+                return;
+            }
+        
+            try {
+                const token = req.cookies.access_token;
+                if (!token) {
+                    throw new Error('No token provided');
+                }
+                await req.server.jwt.verify(token);
+            } catch (err) {
+                return reply.send(err);
+            }
+        });
+
+        this.server.register(Login, { prefix: 'login' });
+        this.server.register(Users, { prefix: 'users' })
+
+        this.server.get('/logout', async (req, reply) => {
+            // Remove cookie 'access_token'
+            reply.setCookie('access_token', '', {
+                path: '/',
+                httpOnly: true,
+                secure: true,
+                expires: new Date(0),
+            });
+
+            return reply.status(200).send({ message: 'Logout successful' });
+        }).after(() => {
+            console.log(this.server.printRoutes());
+        });;
+
+        this.errorControllers = new ErrorControllers();
         this.server.setErrorHandler(this.errorControllers.getUp);
         config();
     }

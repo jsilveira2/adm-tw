@@ -1,20 +1,11 @@
-import { JWT } from '@fastify/jwt'
+import { FastifyRequest, FastifyReply } from 'fastify';
 
 declare module 'fastify' {
-    interface FastifyRequest {
-        jwt: JWT
-    }
-    interface FastifyInstance {
-        authenticate: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
-    }
-}
-type UserPayload = {
-    id: string
-    email: string
-    name: string
-}
-declare module '@fastify/jwt' {
-    interface FastifyJWT {
-        user: UserPayload
-    }
+  interface FastifyReply {
+    setCookie(name: string, value: string, options?: CookieSerializeOptions): FastifyReply;
+  }
+
+  interface FastifyRequest {
+    cookies: { [cookieName: string]: string };
+  }
 }
