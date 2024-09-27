@@ -26,6 +26,7 @@ model UsersDb {
     isLocked      Boolean       @default(false)
 	
     UserRolesDb   UserRolesDb[]
+	UserGuildsDb  UserGuildsDb[]
 
     @@map("users")
 }
@@ -49,7 +50,7 @@ model PermissionsDb {
     isActive  Boolean   @default(true)
     createdAt DateTime? @default(now())
     updatedAt DateTime?
-	
+
     roleId    String
     role      RolesDb   @relation(fields: [roleId], references: [id], onDelete: Cascade)
 
@@ -68,4 +69,30 @@ model UserRolesDb {
     createdAt DateTime? @default(now())
 
     @@map("user_roles")
+}
+
+model GuildDb {
+    id        String    @id @default(uuid())
+    name      String
+    isActive  Boolean   @default(true)
+    createdAt DateTime? @default(now())
+    updatedAt DateTime?
+
+	UserGuildsDb UserGuildsDb[]
+
+    @@map("guild")
+}
+
+model UserGuildsDb {
+    id String @id @default(uuid())
+
+    userId String
+    user   UsersDb @relation(fields: [userId], references: [id], onDelete: Cascade)
+	
+    guildId String
+    guild   GuildDb @relation(fields: [guildId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime? @default(now())
+
+    @@map("user_guilds")
 }
