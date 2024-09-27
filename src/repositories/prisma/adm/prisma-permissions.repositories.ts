@@ -38,4 +38,8 @@ export class PrismaPermissionsRepositories implements IPermissionsRepositories {
     async delete(id: string): Promise<void> {
         await this.db.delete({ where: { id } });
     }
+
+    async deleteByRoleId(roleId: string): Promise<void> {
+        await this.db.deleteMany({ where: { roleId } });
+    }
 }

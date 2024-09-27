@@ -6,6 +6,7 @@ import { config } from 'dotenv';
 import { Users, Login } from './routes/adm/users.routes';
 import { Roles } from './routes/adm/roles.routes';
 import { Permissions } from './routes/adm/permissions.routes';
+import { UserRoles } from './routes/adm/user-roles.routes';
 
 export class App {
     public readonly server: FastifyInstance;
@@ -44,9 +45,10 @@ export class App {
         });
 
         this.server.register(Login, { prefix: 'login' });
-        this.server.register(Users, { prefix: 'users' })
-        this.server.register(Roles, { prefix: 'roles' })
-        this.server.register(Permissions, { prefix: 'permissions' })
+        this.server.register(Users, { prefix: 'users' });
+        this.server.register(Roles, { prefix: 'roles' });
+        this.server.register(Permissions, { prefix: 'permissions' });
+        this.server.register(UserRoles, { prefix: 'userRoles' });
 
         this.server.get('/logout', async (req, reply) => {
             // Remove cookie 'access_token'

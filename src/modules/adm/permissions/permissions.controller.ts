@@ -21,7 +21,7 @@ export class PermissionsController {
     async getByRoleId(request: FastifyRequest, reply: FastifyReply) {
         const { roleId } = request.params as { roleId: string };
         if (!roleId) {
-            return reply.status(400).send('Invalid Role IDs');
+            return reply.status(400).send('Invalid Role ID');
         } else {
             const data = await this.service.findByRoleId(roleId);
 
@@ -55,6 +55,17 @@ export class PermissionsController {
         }
 
         await this.service.delete(id);
+
+        return reply.status(200).send({ message: 'Permission deleted with success' });
+    }
+
+    async deleteByRoleId(request: FastifyRequest, reply: FastifyReply) {
+        const { roleId } = request.params as { roleId: string };
+        if (!roleId) {
+            return reply.status(400).send('Invalid Role ID');
+        }
+
+        await this.service.deleteByRoleId(roleId);
 
         return reply.status(200).send({ message: 'Permission deleted with success' });
     }

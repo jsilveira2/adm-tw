@@ -17,4 +17,7 @@ export async function Permissions(app: FastifyInstance) {
 	app.delete('/:id', async (req, reply) => {
 		await permissionFactory.delete(req, reply);
 	});
+	app.delete('/byRoles/:roleId', async (req, reply) => {
+		await permissionFactory.deleteByRoleId(req, reply);
+	});
 }

@@ -55,4 +55,8 @@ export class PermissionsService {
 
         await this.repository.delete(id);
     }
+
+    async deleteByRoleId(roleId: string): Promise<void> {
+        await this.repository.deleteByRoleId(roleId);
+    }
 }

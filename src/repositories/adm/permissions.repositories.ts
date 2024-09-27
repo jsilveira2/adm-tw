@@ -7,4 +7,5 @@ export abstract class IPermissionsRepositories {
   abstract save(obj: Permission): Promise<PermissionsDb>;
   abstract update(obj: Permission): Promise<PermissionsDb>;
   abstract delete(id: string): Promise<void>;
+  abstract deleteByRoleId(roleId: string): Promise<void>;
 }
