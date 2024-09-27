@@ -5,13 +5,15 @@ import { prisma } from '../../../database/prisma';
 
 export class PrismaRolesRepositories implements IRolesRepositories {
 
+    private readonly db = prisma.rolesDb;
+
     async findById(id: string): Promise<RolesDb | null> {
-        const role = await prisma.rolesDb.findUnique({ where: { id } });
-        return role;
+        const data = await this.db.findUnique({ where: { id } });
+        return data;
     }
 
     async findByArrayIds(ids: string[]): Promise<RolesDb[]> {
-        const data = await prisma.rolesDb.findMany({
+        const data = await this.db.findMany({
             where: {
                 id: {
                     in: ids,
@@ -23,7 +25,7 @@ export class PrismaRolesRepositories implements IRolesRepositories {
     }
 
     async save(obj: Role): Promise<RolesDb> {
-        const newObj = await prisma.rolesDb.create({
+        const newObj = await this.db.create({
             data: { ...obj }
         });
 
@@ -32,7 +34,7 @@ export class PrismaRolesRepositories implements IRolesRepositories {
 
     async update(obj: Role): Promise<RolesDb> {
         const id = obj.id;
-        const newObj = await prisma.rolesDb.update({
+        const newObj = await this.db.update({
             where: { id },
             data: { ...obj }
         });
@@ -41,6 +43,6 @@ export class PrismaRolesRepositories implements IRolesRepositories {
     }
 
     async delete(id: string): Promise<void> {
-        await prisma.rolesDb.delete({ where: { id } });
+        await this.db.delete({ where: { id } });
     }
 }

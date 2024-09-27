@@ -1,5 +1,4 @@
 import { boolean, string, date, z, array } from 'zod'
-import { rolePermissionsSchema } from '../role-permissions/schema';
 
 export const roleSchema = z.object({
     id: string().uuid({ message: 'Invalid ID' }).optional(),

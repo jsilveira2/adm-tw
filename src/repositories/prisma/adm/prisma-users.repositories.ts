@@ -5,80 +5,82 @@ import { prisma } from '../../../database/prisma';
 
 export class PrismaUserRepositories implements IUsersRepositories {
 
-  async findByEmail(email: string): Promise<UsersDb | null> {
-    const user = await prisma.usersDb.findUnique({ where: { email } });
-    return user;
-  }
+	private readonly db = prisma.usersDb;
 
-  async findById(id: string): Promise<UsersDb | null> {
-    const user = await prisma.usersDb.findUnique({ where: { id } });
-    return user;
-  }
+	async findByEmail(email: string): Promise<UsersDb | null> {
+		const user = await await this.db.findUnique({ where: { email } });
+		return user;
+	}
 
-  async exists(id: string): Promise<boolean> {
-    const user = await prisma.usersDb.findUnique({ where: { id } });
-    return !!user;
-  }
+	async findById(id: string): Promise<UsersDb | null> {
+		const user = await await this.db.findUnique({ where: { id } });
+		return user;
+	}
 
-  async findAll(): Promise<Omit<UsersDb, 'password'>[]> {
-    const users = await prisma.usersDb.findMany({
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        isActive: true,
-        createdAt: true,
-        updatedAt: true,
-        lastLogin: true,
-        loginAttempts: true,
-        isLocked: true,
-      },
-    });
+	async exists(id: string): Promise<boolean> {
+		const user = await await this.db.findUnique({ where: { id } });
+		return !!user;
+	}
 
-    return users;
-  }
+	async findAll(): Promise<Omit<UsersDb, 'password'>[]> {
+		const users = await await this.db.findMany({
+			select: {
+				id: true,
+				email: true,
+				name: true,
+				isActive: true,
+				createdAt: true,
+				updatedAt: true,
+				lastLogin: true,
+				loginAttempts: true,
+				isLocked: true,
+			},
+		});
 
-  async save(newUser: User): Promise<Omit<UsersDb, 'password'>> {
-    const user = await prisma.usersDb.create({
-      data: { ...newUser },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        isActive: true,
-        createdAt: true,
-        updatedAt: true,
-        lastLogin: true,
-        loginAttempts: true,
-        isLocked: true,
-      },
-    });
+		return users;
+	}
 
-    return user;
-  }
+	async save(newUser: User): Promise<Omit<UsersDb, 'password'>> {
+		const user = await await this.db.create({
+			data: { ...newUser },
+			select: {
+				id: true,
+				email: true,
+				name: true,
+				isActive: true,
+				createdAt: true,
+				updatedAt: true,
+				lastLogin: true,
+				loginAttempts: true,
+				isLocked: true,
+			},
+		});
 
-  async update(attUser: User): Promise<Omit<UsersDb, 'password'>> {
-    const id = attUser.id;
-    const user = await prisma.usersDb.update({
-      where: { id },
-      data: { ...attUser },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        isActive: true,
-        createdAt: true,
-        updatedAt: true,
-        lastLogin: true,
-        loginAttempts: true,
-        isLocked: true,
-      },
-    });
+		return user;
+	}
 
-    return user;
-  }
+	async update(attUser: User): Promise<Omit<UsersDb, 'password'>> {
+		const id = attUser.id;
+		const user = await await this.db.update({
+			where: { id },
+			data: { ...attUser },
+			select: {
+				id: true,
+				email: true,
+				name: true,
+				isActive: true,
+				createdAt: true,
+				updatedAt: true,
+				lastLogin: true,
+				loginAttempts: true,
+				isLocked: true,
+			},
+		});
 
-  async delete(id: string): Promise<void> {
-    await prisma.usersDb.delete({ where: { id } });
-  }
+		return user;
+	}
+
+	async delete(id: string): Promise<void> {
+		await await this.db.delete({ where: { id } });
+	}
 }

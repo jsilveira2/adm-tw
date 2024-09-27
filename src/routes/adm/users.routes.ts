@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { userFactory } from '../modules/adm/users/users.factory';
+import { userFactory } from '../../modules/adm/users/users.factory';
 
 export async function Users(app: FastifyInstance) {
 	app.get('/', async (req, reply) => {

@@ -3,7 +3,9 @@ import multipart from '@fastify/multipart';
 import { ErrorControllers } from './middleware/error';
 import { FastifyInstance } from 'fastify/types/instance';
 import { config } from 'dotenv';
-import { Users, Login } from './routes/users.routes';
+import { Users, Login } from './routes/adm/users.routes';
+import { Roles } from './routes/adm/roles.routes';
+import { Permissions } from './routes/adm/permissions.routes';
 
 export class App {
     public readonly server: FastifyInstance;
@@ -43,6 +45,8 @@ export class App {
 
         this.server.register(Login, { prefix: 'login' });
         this.server.register(Users, { prefix: 'users' })
+        this.server.register(Roles, { prefix: 'roles' })
+        this.server.register(Permissions, { prefix: 'permissions' })
 
         this.server.get('/logout', async (req, reply) => {
             // Remove cookie 'access_token'
@@ -56,7 +60,7 @@ export class App {
             return reply.status(200).send({ message: 'Logout successful' });
         }).after(() => {
             console.log(this.server.printRoutes());
-        });;
+        });
 
         this.errorControllers = new ErrorControllers();
         this.server.setErrorHandler(this.errorControllers.getUp);
