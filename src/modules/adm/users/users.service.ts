@@ -53,17 +53,28 @@ export class UsersService {
 		}
 
 		obj.updatedAt = new Date();
+		if (obj.password) {
+			const password = await bcrypt.hash(obj.password, 10);
+			obj.password = password;
+		}
+		
 		return await this.repository.update(obj);
 	}
 
 	async delete(id: string): Promise<void> {
-		const exists = await this.repository.exists(id);
+		const obj = await this.repository.findById(id);
 
-		if (!exists) {
+		if (!obj) {
 			throw new ErrorHelper(this.className, 'delete', 'User not found', 404);
 		}
 
-		await this.repository.delete(id);
+		obj.isActive = false;
+		const dataToUpdate = {
+			...obj,
+			updatedAt: new Date(),
+		};
+
+		await this.repository.update(dataToUpdate);
 	}
 
 	async isValidPassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
@@ -80,8 +91,23 @@ export class UsersService {
 		const data = await this.findByEmail(email);
 
 		if (!data || !this.isValidPassword(password, data.password)) {
+			data.loginAttempts = data.loginAttempts + 1;
+			const dataToUpdate = {
+				...data,
+				updatedAt: new Date(),
+			};
+			await this.repository.update(dataToUpdate);
+
 			throw new ErrorHelper(this.className, 'login', 'Invalid credentials', 404);
 		}
+
+		data.lastLogin = new Date();
+		data.loginAttempts = 0;
+		const dataToUpdate = {
+			...data,
+			updatedAt: new Date(),
+		};
+		await this.repository.update(dataToUpdate);
 
 		return data;
 	}

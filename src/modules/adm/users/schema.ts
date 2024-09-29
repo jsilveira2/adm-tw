@@ -6,7 +6,7 @@ export const userSchema = z.object({
     name: string().min(2, { message: 'invalid name length' }),
     password: string().min(6, { message: 'invalid password length' }),
     isActive: boolean().default(true),
-    createdAt: date().default(new Date()),
+    createdAt: date().default(new Date()).nullable(),
     updatedAt: date().default(new Date()),
     lastLogin: date().nullable().optional(),
     loginAttempts: number().default(0),
