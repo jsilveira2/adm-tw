@@ -1,13 +1,12 @@
 import { PrismaPermissionsRepositories } from '../../../repositories/prisma/adm/prisma-permissions.repositories';
 import { PermissionsController } from './permissions.controller';
 import { PermissionsService } from './permissions.service';
+import { FactoryBase } from '../../base/base.factory';
 
-const PermissionFactory = () => {
-  const prismaRepositories = new PrismaPermissionsRepositories();
-  const service = new PermissionsService(prismaRepositories);
-
-  const controller = new PermissionsController(service);
-  return controller;
+class PermissionFactory extends FactoryBase<PermissionsController, PermissionsService, PrismaPermissionsRepositories> {
+    constructor() {
+        super(PrismaPermissionsRepositories, PermissionsService, PermissionsController);
+    }
 }
 
-export const permissionFactory = PermissionFactory();
+export const permissionFactory = new PermissionFactory().createControllerService();

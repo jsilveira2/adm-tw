@@ -1,9 +1,9 @@
 import { ErrorHelper } from '../../helpers/error-helper';
 
 export abstract class ServiceBase<T, K> {
-    private readonly className: string;
+    public readonly className: string;
 
-    constructor(private repository: any, className: string) {
+    constructor(public repository: any, className: string) {
         this.className = className;
     }
 

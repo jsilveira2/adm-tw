@@ -49,7 +49,7 @@ export class App {
         this.server.register(Users, { prefix: 'users' });
         this.server.register(Roles, { prefix: 'roles' });
         this.server.register(Permissions, { prefix: 'permissions' });
-        this.server.register(UserRoles, { prefix: 'userRoles' });
+        this.server.register(UserRoles, { prefix: 'user-roles' });
         this.server.register(Guild, { prefix: 'guild' });
 
         this.server.get('/logout', async (req, reply) => {

@@ -1,11 +1,7 @@
 import { PermissionsDb } from '@prisma/client';
-import { Permission } from '../../modules/adm/permissions/schema';
+import { IBaseRepositories } from '../base/base.repositories';
 
-export abstract class IPermissionsRepositories {
-  abstract findById(id: string): Promise<PermissionsDb | null>;
-  abstract findByRoleId(roleId: string): Promise<PermissionsDb[]>;
-  abstract save(obj: Permission): Promise<PermissionsDb>;
-  abstract update(obj: Permission): Promise<PermissionsDb>;
-  abstract delete(id: string): Promise<void>;
-  abstract deleteByRoleId(roleId: string): Promise<void>;
+export abstract class IPermissionsRepositories extends IBaseRepositories<PermissionsDb, string> {
+	abstract findByRoleId(roleId: string): Promise<PermissionsDb[]>;
+	abstract deleteByRoleId(roleId: string): Promise<void>;
 }
