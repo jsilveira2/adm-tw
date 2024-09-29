@@ -1,17 +1,20 @@
 import { FastifyInstance } from 'fastify';
-import { roleFactory } from '../../modules/adm/roles/roles.factory';
+import { rolesFactory } from '../../modules/adm/roles/roles.factory';
 
 export async function Roles(app: FastifyInstance) {
+	app.get('/', async (req, reply) => {
+		await rolesFactory.get(req, reply);
+	});
 	app.get('/:id', async (req, reply) => {
-		await roleFactory.getById(req, reply);
+		await rolesFactory.getById(req, reply);
 	});
 	app.post('/', async (req, reply) => {
-		await roleFactory.create(req, reply);
+		await rolesFactory.create(req, reply);
 	});
 	app.patch('/:id', async (req, reply) => {
-		await roleFactory.update(req, reply);
+		await rolesFactory.update(req, reply);
 	});
 	app.delete('/:id', async (req, reply) => {
-		await roleFactory.delete(req, reply);
+		await rolesFactory.delete(req, reply);
 	});
 }

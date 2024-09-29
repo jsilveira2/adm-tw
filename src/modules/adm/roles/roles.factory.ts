@@ -1,13 +1,12 @@
 import { PrismaRolesRepositories } from '../../../repositories/prisma/adm/prisma-roles.repositories';
 import { RolesController } from './roles.controller';
 import { RolesService } from './roles.service';
+import { FactoryBase } from '../../base/base.factory';
 
-const RoleFactory = () => {
-  const prismaRepositories = new PrismaRolesRepositories();
-  const service = new RolesService(prismaRepositories);
-
-  const controller = new RolesController(service);
-  return controller;
+class RoleFactory extends FactoryBase<RolesController, RolesService, PrismaRolesRepositories> {
+    constructor() {
+        super(PrismaRolesRepositories, RolesService, RolesController);
+    }
 }
 
-export const roleFactory = RoleFactory();
+export const rolesFactory = new RoleFactory().createControllerService();
