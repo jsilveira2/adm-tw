@@ -1,22 +1,11 @@
 import { ErrorHelper } from '../../../helpers/error-helper';
 import { UserRolesDb } from '@prisma/client';
-import { UserRoles } from './schema';
 import { IUserRolesRepositories } from '../../../repositories/adm/user-roles.repositories';
+import { ServiceBase } from '../../base/base.service';
 
-export class UserRolesService {
-
-    private readonly className = 'UserRolesService';
-
-    constructor(private repository: IUserRolesRepositories) { }
-
-    async findById(id: string): Promise<UserRolesDb> {
-        const findData = await this.repository.findById(id);
-
-        if (!findData) {
-            throw new ErrorHelper(this.className, 'findById', 'UserRole not found', 404);
-        }
-
-        return findData;
+export class UserRolesService extends ServiceBase<UserRolesDb, string> {
+    constructor(repository: IUserRolesRepositories) {
+        super(repository, 'UserRolesService');
     }
 
     async findByUserId(userId: string): Promise<UserRolesDb[]> {
@@ -37,22 +26,6 @@ export class UserRolesService {
         }
 
         return findData;
-    }
-
-    async create(obj: UserRoles): Promise<UserRolesDb> {
-        const data = await this.repository.save(obj);
-
-        return data;
-    }
-
-    async delete(id: string): Promise<void> {
-        const exists = await this.repository.findById(id);
-
-        if (!exists) {
-            throw new ErrorHelper(this.className, 'delete', 'UserRole not found', 404);
-        }
-
-        await this.repository.delete(id);
     }
 
     async deleteByUserId(userId: string): Promise<void> {

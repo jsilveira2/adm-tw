@@ -1,13 +1,12 @@
 import { PrismaUserRolesRepositories } from '../../../repositories/prisma/adm/prisma-user-roles.repositories';
 import { UserRolesController } from './user-roles.controller';
 import { UserRolesService } from './user-roles.service';
+import { FactoryBase } from '../../base/base.factory';
 
-const UserRolesFactory = () => {
-  const prismaRepositories = new PrismaUserRolesRepositories();
-  const service = new UserRolesService(prismaRepositories);
-
-  const controller = new UserRolesController(service);
-  return controller;
+class UserRolesFactory extends FactoryBase<UserRolesController, UserRolesService, PrismaUserRolesRepositories> {
+    constructor() {
+        super(PrismaUserRolesRepositories, UserRolesService, UserRolesController);
+    }
 }
 
-export const userRolesFactory = UserRolesFactory();
+export const userRolesFactory = new UserRolesFactory().createControllerService();
