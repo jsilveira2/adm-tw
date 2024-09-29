@@ -1,13 +1,12 @@
 import { PrismaGuildRepositories } from '../../repositories/prisma/guild/prisma-guild.repositories';
 import { GuildController } from './guild.controller';
 import { GuildService } from './guild.service';
+import { FactoryBase } from '../base/base.factory';
 
-const GuildFactory = () => {
-  const prismaRepositories = new PrismaGuildRepositories();
-  const service = new GuildService(prismaRepositories);
-
-  const controller = new GuildController(service);
-  return controller;
+class GuildFactory extends FactoryBase<GuildController, GuildService, PrismaGuildRepositories> {
+    constructor() {
+        super(PrismaGuildRepositories, GuildService, GuildController);
+    }
 }
 
-export const guildFactory = GuildFactory();
+export const guildFactory = new GuildFactory().createControllerService();
