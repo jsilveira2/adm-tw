@@ -1,6 +1,6 @@
 import { ErrorHelper } from '../../../helpers/error-helper';
 import { UserRolesDb } from '@prisma/client';
-import { IUserRolesRepositories } from '../../../repositories/adm/user-roles.repositories';
+import { IUserRolesRepositories } from './user-roles.repositories';
 import { ServiceBase } from '../../base/base.service';
 
 export class UserRolesService extends ServiceBase<UserRolesDb, string> {

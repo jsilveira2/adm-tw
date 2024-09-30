@@ -1,5 +1,5 @@
 import { UserRolesDb } from '@prisma/client';
-import { IBaseRepositories } from '../base/base.repositories';
+import { IBaseRepositories } from '../../base/base.repositories';
 
 export abstract class IUserRolesRepositories extends IBaseRepositories<UserRolesDb, string> {
     abstract findByUserId(userId: string): Promise<UserRolesDb[]>;

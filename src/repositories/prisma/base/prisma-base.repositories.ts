@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { IBaseRepositories } from '../../base/base.repositories';
+import { IBaseRepositories } from '../../../modules/base/base.repositories';
 
 export abstract class PrismaBaseRepositories<T, K> implements IBaseRepositories<T, K> {
     protected db: PrismaClient;

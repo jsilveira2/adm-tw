@@ -1,6 +1,6 @@
 import { ErrorHelper } from '../../../helpers/error-helper';
 import { UsersDb } from '@prisma/client';
-import { IUsersRepositories } from '../../../repositories/adm/user.repositories';
+import { IUsersRepositories } from './user.repositories';
 import { User } from './schema';
 import bcrypt from 'bcrypt';
 

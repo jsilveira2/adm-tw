@@ -1,6 +1,6 @@
 import { UsersDb } from '@prisma/client';
 import { User } from '../../../modules/adm/users/schema';
-import { IUsersRepositories } from '../../adm/user.repositories';
+import { IUsersRepositories } from '../../../modules/adm/users/user.repositories';
 import { prisma } from '../../../database/prisma';
 
 export class PrismaUserRepositories implements IUsersRepositories {

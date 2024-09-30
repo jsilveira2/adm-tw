@@ -1,5 +1,5 @@
 import { GuildDb } from '@prisma/client';
-import { IGuildRepositories } from '../../guild/guild.repositories';
+import { IGuildRepositories } from '../../../modules/guild/guild.repositories';
 import { prisma } from '../../../database/prisma';
 import { PrismaBaseRepositories } from '../../prisma/base/prisma-base.repositories';
 

@@ -1,5 +1,5 @@
 import { UsersDb } from '@prisma/client';
-import { User } from '../../modules/adm/users/schema';
+import { User } from './schema';
 
 export abstract class IUsersRepositories {
 	abstract findByEmail(email: string): Promise<UsersDb | null>;

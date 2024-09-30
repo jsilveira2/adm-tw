@@ -1,5 +1,5 @@
 import { RolesDb } from '@prisma/client';
-import { IRolesRepositories } from '../../adm/roles.repositories';
+import { IRolesRepositories } from '../../../modules/adm/roles/roles.repositories';
 import { prisma } from '../../../database/prisma';
 import { PrismaBaseRepositories } from '../base/prisma-base.repositories';
 

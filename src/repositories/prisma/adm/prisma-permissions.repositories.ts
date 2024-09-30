@@ -1,5 +1,5 @@
 import { PermissionsDb } from '@prisma/client';
-import { IPermissionsRepositories } from '../../adm/permissions.repositories';
+import { IPermissionsRepositories } from '../../../modules/adm/permissions/permissions.repositories';
 import { PrismaBaseRepositories } from '../base/prisma-base.repositories';
 import { prisma } from '../../../database/prisma';
 

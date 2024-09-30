@@ -1,6 +1,6 @@
 import { ErrorHelper } from '../../../helpers/error-helper';
 import { PermissionsDb } from '@prisma/client';
-import { IPermissionsRepositories } from '../../../repositories/adm/permissions.repositories';
+import { IPermissionsRepositories } from './permissions.repositories';
 import { ServiceBase } from '../../base/base.service';
 
 export class PermissionsService extends ServiceBase<PermissionsDb, string> {
