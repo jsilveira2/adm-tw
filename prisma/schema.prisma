@@ -117,10 +117,30 @@ model ExternalPlayersDb {
 	guildId   String
     guild     GuildDb @relation(fields: [guildId], references: [id], onDelete: Cascade)
 
-    CharacterEventDisponibility CharacterEventDisponibility[]
-    
+    ExternalPlayersDisponibilityDb ExternalPlayersDisponibilityDb[]
+
     @@index([guildId])
     @@map("external_players")
+	CharacterEventDisponibilityDb CharacterEventDisponibilityDb[]
+}
+
+model ExternalPlayersDisponibilityDb {
+    id                   String    @id @default(uuid())
+    disponibility        Int
+    obs                  String    @db.VarChar(255)
+    createdAt            DateTime? @default(now())
+    updatedAt            DateTime? @updatedAt
+
+	pvpEventId           String
+    pvpEvent             PvPEventDb @relation(fields: [pvpEventId], references: [id], onDelete: Cascade)
+
+    externalPlayerId     String
+    externalPlayer       ExternalPlayersDb @relation(fields: [externalPlayerId], references: [id], onDelete: Cascade)
+
+    @@index([pvpEventId])
+    @@index([externalPlayerId])
+    @@index([disponibility])
+    @@map("external_players_disponibility")
 }
 
 model CharacterClassesDb {
@@ -152,7 +172,8 @@ model CharactersDb {
 	guildId              String
     guild                GuildDb @relation(fields: [guildId], references: [id], onDelete: Cascade)
 
-    CharacterEventDisponibility CharacterEventDisponibility[]
+    CharacterEventDisponibilityDb CharacterEventDisponibilityDb[]
+    PartyMembers PartyMembers[]
 
     @@index([guildId])
     @@index([characterClassId])
@@ -174,8 +195,9 @@ model PvPEventDb {
 	guildId                     String
     guild                       GuildDb @relation(fields: [guildId], references: [id], onDelete: Cascade)
 
-    PvPEventPartyDb             PvPEventPartyDb[]
-    CharacterEventDisponibility CharacterEventDisponibility[]
+    PvPEventPartyDb                PvPEventPartyDb[]
+    CharacterEventDisponibilityDb  CharacterEventDisponibilityDb[]
+    ExternalPlayersDisponibilityDb ExternalPlayersDisponibilityDb[]
 
     @@index([guildId])
     @@map("pvp_event")
@@ -197,15 +219,15 @@ model PvPEventPartyDb {
     @@map("pvp_event_party")
 }
 
-model CharacterEventDisponibility {
+model CharacterEventDisponibilityDb {
     id                   String    @id @default(uuid())
     disponibility        Int
     obs                  String    @db.VarChar(255)
     createdAt            DateTime? @default(now())
     updatedAt            DateTime? @updatedAt
 
-	idCharacter          String @unique
-    character            CharactersDb @relation(fields: [idCharacter], references: [id], onDelete: Cascade)
+	characterId          String
+    character            CharactersDb @relation(fields: [characterId], references: [id], onDelete: Cascade)
 
 	pvpEventId           String
     pvpEvent             PvPEventDb @relation(fields: [pvpEventId], references: [id], onDelete: Cascade)
@@ -213,12 +235,11 @@ model CharacterEventDisponibility {
     externalPlayerId     String
     externalPlayer       ExternalPlayersDb @relation(fields: [externalPlayerId], references: [id], onDelete: Cascade)
 
-    PartyMembers         PartyMembers[]
-
-    @@index([idCharacter])
+    @@index([characterId])
     @@index([pvpEventId])
     @@index([externalPlayerId])
     @@index([disponibility])
+    @@unique([characterId, pvpEventId, externalPlayerId])
     @@map("character_event_disponibility")
 }
 
@@ -229,14 +250,14 @@ model PartyMembers {
     createdAt            DateTime? @default(now())
     updatedAt            DateTime? @updatedAt
 
-	idCharacter          String
-    character            CharacterEventDisponibility @relation(fields: [idCharacter], references: [idCharacter], onDelete: Cascade)
+	characterId          String
+    character            CharactersDb @relation(fields: [characterId], references: [id], onDelete: Cascade)
 
 	pvpPartyId           String
     pvpParty             PvPEventPartyDb @relation(fields: [pvpPartyId], references: [id], onDelete: Cascade)
     
     @@index([pvpPartyId])
-    @@unique([idCharacter, pvpPartyId])
+    @@unique([characterId, pvpPartyId])
     @@map("party_members")
 }
 
