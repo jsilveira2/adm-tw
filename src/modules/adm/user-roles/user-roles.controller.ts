@@ -36,7 +36,7 @@ export class UserRolesController extends ControllerBase<typeof userRolesSchema.s
             return reply.status(400).send('Invalid User ID');
         }
 
-        await this.service.deleteByRoleId(userId);
+        await this.service.deleteByUserId(userId);
 
         return reply.status(200).send({ message: 'UserRole deleted with success' });
     }

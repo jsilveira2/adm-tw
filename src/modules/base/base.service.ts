@@ -14,7 +14,7 @@ export abstract class ServiceBase<T, K> {
     async findById(id: K): Promise<T> {
         const findData = await this.repository.findById(id);
         if (!findData) {
-            throw new ErrorHelper(this.className, 'findById', `${this.className} not found`, 404);
+            throw new ErrorHelper(this.className, 'findById', `Object not found`, 404);
         }
         return findData;
     }
@@ -26,7 +26,7 @@ export abstract class ServiceBase<T, K> {
     async update(id: K, obj: T): Promise<T> {
         const exists = await this.repository.findById(id);
         if (!exists) {
-            throw new ErrorHelper(this.className, 'update', `${this.className} not found`, 404);
+            throw new ErrorHelper(this.className, 'update', `Object not found`, 404);
         }
 
         (obj as T & { updatedAt: Date }).updatedAt = new Date();
@@ -36,7 +36,7 @@ export abstract class ServiceBase<T, K> {
     async delete(id: K): Promise<void> {
         const exists = await this.repository.findById(id);
         if (!exists) {
-            throw new ErrorHelper(this.className, 'delete', `${this.className} not found`, 404);
+            throw new ErrorHelper(this.className, 'delete', `Object not found`, 404);
         }
 
         await this.repository.delete(id);

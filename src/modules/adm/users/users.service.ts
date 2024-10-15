@@ -87,28 +87,19 @@ export class UsersService {
 		}
 	}
 
-	async login(email: string, password: string): Promise<Omit<UsersDb, 'password'>> {
-		const data = await this.findByEmail(email);
-
-		if (!data || !this.isValidPassword(password, data.password)) {
-			data.loginAttempts = data.loginAttempts + 1;
-			const dataToUpdate = {
-				...data,
-				updatedAt: new Date(),
-			};
-			await this.repository.update(dataToUpdate);
-
-			throw new ErrorHelper(this.className, 'login', 'Invalid credentials', 404);
+	async login(email: string, password: string): Promise<UsersDb> {
+		const user = await this.repository.findByEmail(email);
+		if (!user) {
+		  throw new ErrorHelper('UsersService', 'login', 'Invalid credentials', 404);
 		}
-
-		data.lastLogin = new Date();
-		data.loginAttempts = 0;
-		const dataToUpdate = {
-			...data,
-			updatedAt: new Date(),
-		};
-		await this.repository.update(dataToUpdate);
-
-		return data;
-	}
+		
+		const isValidPassword = await this.isValidPassword(password, user.password);
+		if (!isValidPassword) {
+		  throw new ErrorHelper('UsersService', 'login', 'Invalid credentials', 404);
+		}
+	  
+		await this.repository.update({ ...user, lastLogin: new Date(), loginAttempts: 0 });
+		
+		return user;
+	  }
 }

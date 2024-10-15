@@ -7,11 +7,10 @@ export const userSchema = z.object({
     password: string().min(6, { message: 'invalid password length' }),
     isActive: boolean().default(true),
     createdAt: date().default(new Date()).nullable(),
-    updatedAt: date().default(new Date()),
+    updatedAt: date().default(new Date()).nullable(),
     lastLogin: date().nullable().optional(),
     loginAttempts: number().default(0),
-    isLocked: boolean().default(false),
-    token: string().optional()
+    isLocked: boolean().default(false)
 });
 
 export type User = z.infer<typeof userSchema>;
