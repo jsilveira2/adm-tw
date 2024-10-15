@@ -15,12 +15,12 @@ datasource db {
 
 model UsersDb {
     id            String        @id @default(uuid())
-    email         String        @unique
-    name          String
+    email         String        @unique @db.VarChar(120)
+    name          String        @db.VarChar(50)
     password      String
     isActive      Boolean       @default(true)
     createdAt     DateTime?     @default(now())
-    updatedAt     DateTime?
+    updatedAt     DateTime?     @updatedAt
     lastLogin     DateTime?
     loginAttempts Int           @default(0)
     isLocked      Boolean       @default(false)
@@ -28,71 +28,215 @@ model UsersDb {
     UserRolesDb   UserRolesDb[]
 	UserGuildsDb  UserGuildsDb[]
 
+    @@index([email])
     @@map("users")
 }
 
 model RolesDb {
-    id        String    @id @default(uuid())
-    name      String
-    isActive  Boolean   @default(true)
-    createdAt DateTime? @default(now())
-    updatedAt DateTime?
+    id            String    @id @default(uuid())
+    name          String    @db.VarChar(50)
+    isActive      Boolean   @default(true)
+    createdAt     DateTime? @default(now())
+    updatedAt     DateTime? @updatedAt
 
     PermissionsDb PermissionsDb[]
-	UserRolesDb UserRolesDb[] @relation(name: "RolesUser")
+	UserRolesDb   UserRolesDb[] @relation(name: "RolesUser")
 
     @@map("roles")
 }
 
 model PermissionsDb {
     id        String    @id @default(uuid())
-    name      String
+    name      String    @db.VarChar(50)
     isActive  Boolean   @default(true)
     createdAt DateTime? @default(now())
-    updatedAt DateTime?
+    updatedAt DateTime? @updatedAt
 
     roleId    String
     role      RolesDb   @relation(fields: [roleId], references: [id], onDelete: Cascade)
 
+    @@index([roleId])
     @@map("permissions")
 }
 
 model UserRolesDb {
-    id String @id @default(uuid())
+    id        String @id @default(uuid())
 
-    userId String
-    user   UsersDb @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String
+    user      UsersDb @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    roleId String
-    role   RolesDb @relation(fields: [roleId], references: [id], onDelete: Cascade, name: "RolesUser")
+    roleId    String
+    role      RolesDb @relation(fields: [roleId], references: [id], onDelete: Cascade, name: "RolesUser")
 
     createdAt DateTime? @default(now())
 
+    @@index([userId])
+    @@index([roleId])
     @@map("user_roles")
 }
 
 model GuildDb {
-    id        String    @id @default(uuid())
-    name      String
-    isActive  Boolean   @default(true)
-    createdAt DateTime? @default(now())
-    updatedAt DateTime?
+    id                String    @id @default(uuid())
+    name              String    @db.VarChar(50)
+    isActive          Boolean   @default(true)
+    createdAt         DateTime? @default(now())
+    updatedAt         DateTime? @updatedAt
 
-	UserGuildsDb UserGuildsDb[]
+	UserGuildsDb      UserGuildsDb[]
+    ExternalPlayersDb ExternalPlayersDb[]
+    CharactersDb      CharactersDb[]
+    PvPEventDb        PvPEventDb[]
 
     @@map("guild")
 }
 
 model UserGuildsDb {
-    id String @id @default(uuid())
+    id        String @id @default(uuid())
 
-    userId String
-    user   UsersDb @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String
+    user      UsersDb @relation(fields: [userId], references: [id], onDelete: Cascade)
 	
-    guildId String
-    guild   GuildDb @relation(fields: [guildId], references: [id], onDelete: Cascade)
+    guildId   String
+    guild     GuildDb @relation(fields: [guildId], references: [id], onDelete: Cascade)
 
     createdAt DateTime? @default(now())
 
+    @@index([userId])
+    @@index([guildId])
     @@map("user_guilds")
 }
+
+model ExternalPlayersDb {
+    id        String    @id @default(uuid())
+    name      String    @db.VarChar(50)
+    obs       String    @db.VarChar(255)
+    isActive  Boolean   @default(true)
+    createdAt DateTime? @default(now())
+    updatedAt DateTime? @updatedAt
+
+	guildId   String
+    guild     GuildDb @relation(fields: [guildId], references: [id], onDelete: Cascade)
+
+    CharacterEventDisponibility CharacterEventDisponibility[]
+    
+    @@index([guildId])
+    @@map("external_players")
+}
+
+model CharacterClassesDb {
+    id           String    @id @default(uuid())
+    name         String    @unique @db.VarChar(50)
+    shortName    String    @unique @db.VarChar(6)
+    isActive     Boolean   @default(true)
+    createdAt    DateTime? @default(now())
+
+    CharactersDb CharactersDb[]
+
+    @@map("character_classes")
+}
+
+model CharactersDb {
+    id                   String    @id @default(uuid())
+    nickname             String    @unique @db.VarChar(50)
+    obs                  String    @db.VarChar(255)
+    ownerName            String    @db.VarChar(50)
+    rank                 Int
+    defaultDisponibility Int
+    isActive             Boolean   @default(true)
+    createdAt            DateTime? @default(now())
+    updatedAt            DateTime? @updatedAt
+
+	characterClassId     String
+    characterClasses     CharacterClassesDb @relation(fields: [characterClassId], references: [id], onDelete: Cascade)
+
+	guildId              String
+    guild                GuildDb @relation(fields: [guildId], references: [id], onDelete: Cascade)
+
+    CharacterEventDisponibility CharacterEventDisponibility[]
+
+    @@index([guildId])
+    @@index([characterClassId])
+    @@index([nickname])
+    @@index([ownerName])
+    @@index([rank])
+    @@map("characters")
+}
+
+model PvPEventDb {
+    id                          String    @id @default(uuid())
+    date                        DateTime
+    name                        String    @db.VarChar(50)
+    type                        Int
+    ended                       Boolean   @default(false)
+    createdAt                   DateTime? @default(now())
+    updatedAt                   DateTime? @updatedAt
+
+	guildId                     String
+    guild                       GuildDb @relation(fields: [guildId], references: [id], onDelete: Cascade)
+
+    PvPEventPartyDb             PvPEventPartyDb[]
+    CharacterEventDisponibility CharacterEventDisponibility[]
+
+    @@index([guildId])
+    @@map("pvp_event")
+}
+
+model PvPEventPartyDb {
+    id                   String    @id @default(uuid())
+    name                 String    @db.VarChar(50)
+    obs                  String    @db.VarChar(255)
+    createdAt            DateTime? @default(now())
+    updatedAt            DateTime? @updatedAt
+
+	pvpEventId           String
+    pvpEvent             PvPEventDb @relation(fields: [pvpEventId], references: [id], onDelete: Cascade)
+
+    PartyMembers         PartyMembers[]
+
+    @@index([pvpEventId])
+    @@map("pvp_event_party")
+}
+
+model CharacterEventDisponibility {
+    id                   String    @id @default(uuid())
+    disponibility        Int
+    obs                  String    @db.VarChar(255)
+    createdAt            DateTime? @default(now())
+    updatedAt            DateTime? @updatedAt
+
+	idCharacter          String @unique
+    character            CharactersDb @relation(fields: [idCharacter], references: [id], onDelete: Cascade)
+
+	pvpEventId           String
+    pvpEvent             PvPEventDb @relation(fields: [pvpEventId], references: [id], onDelete: Cascade)
+
+    externalPlayerId     String
+    externalPlayer       ExternalPlayersDb @relation(fields: [externalPlayerId], references: [id], onDelete: Cascade)
+
+    PartyMembers         PartyMembers[]
+
+    @@index([idCharacter])
+    @@index([pvpEventId])
+    @@index([externalPlayerId])
+    @@index([disponibility])
+    @@map("character_event_disponibility")
+}
+
+model PartyMembers {
+    id                   String    @id @default(uuid())
+    disponibility        Int
+    obs                  String    @db.VarChar(255)
+    createdAt            DateTime? @default(now())
+    updatedAt            DateTime? @updatedAt
+
+	idCharacter          String
+    character            CharacterEventDisponibility @relation(fields: [idCharacter], references: [idCharacter], onDelete: Cascade)
+
+	pvpPartyId           String
+    pvpParty             PvPEventPartyDb @relation(fields: [pvpPartyId], references: [id], onDelete: Cascade)
+    
+    @@index([pvpPartyId])
+    @@unique([idCharacter, pvpPartyId])
+    @@map("party_members")
+}
+

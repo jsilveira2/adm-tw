@@ -29,7 +29,6 @@ export abstract class ServiceBase<T, K> {
             throw new ErrorHelper(this.className, 'update', `Object not found`, 404);
         }
 
-        (obj as T & { updatedAt: Date }).updatedAt = new Date();
         return await this.repository.update(obj);
     }
 
