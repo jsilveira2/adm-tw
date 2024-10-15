@@ -9,6 +9,8 @@ import { Permissions } from './routes/adm/permissions.routes';
 import { UserRoles } from './routes/adm/user-roles.routes';
 import { Guild } from './routes/guild/guild.routes';
 import { UserGuild } from './routes/guild/user-guild.routes';
+import { PvPEvent } from './routes/pvp-event/pvp-event.routes';
+import { ExternalPlayers } from './routes/external-players/external-players.route';
 
 export class App {
     public readonly server: FastifyInstance;
@@ -53,6 +55,8 @@ export class App {
         this.server.register(UserRoles, { prefix: 'user-roles' });
         this.server.register(Guild, { prefix: 'guild' });
         this.server.register(UserGuild, { prefix: 'user-guild' });
+        this.server.register(PvPEvent, { prefix: 'pvp-event' });
+        this.server.register(ExternalPlayers, { prefix: 'external-players' });
 
         this.server.get('/logout', async (req, reply) => {
             // Remove cookie 'access_token'
