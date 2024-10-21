@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">90.47% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>19/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>4/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">90.47% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>19/21</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -90,68 +90,68 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { ExternalPlayersDisponibilityDb } from '@prisma/client';<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import { ExternalPlayersDisponibilityDb } from '@prisma/client';
 import { IExternalPlayersDisponibilityRepositories } from '../../../modules/external-players/external-players-disponibility/external-players-disponibility.repositories';
-<span class="cstat-no" title="statement not covered" >import { PrismaBaseRepositories } from '../base/prisma-base.repositories';</span>
-<span class="cstat-no" title="statement not covered" >import { prisma } from '../../../database/prisma';</span>
-<span class="cstat-no" title="statement not covered" >import { Disponibility } from '../../../enum/disponibility.enum';</span>
+import { PrismaBaseRepositories } from '../base/prisma-base.repositories';
+import { prisma } from '../../../database/prisma';
+import { Disponibility } from '../../../enum/disponibility.enum';
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export class PrismaExternalPlayersDisponibilityRepositories extends PrismaBaseRepositories&lt;ExternalPlayersDisponibilityDb, string&gt; implements IExternalPlayersDisponibilityRepositories {</span>
+export class PrismaExternalPlayersDisponibilityRepositories extends PrismaBaseRepositories&lt;ExternalPlayersDisponibilityDb, string&gt; implements IExternalPlayersDisponibilityRepositories {
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    constructor() {</span>
-<span class="cstat-no" title="statement not covered" >        super(prisma, (client) =&gt; client.externalPlayersDisponibilityDb);</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+    constructor() {
+        super(prisma, (client) =&gt; client.externalPlayersDisponibilityDb);
+    }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    async findByPvPEventId(pvpEventId: string): Promise&lt;ExternalPlayersDisponibilityDb[]&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        return await this.db.externalPlayersDisponibilityDb.findMany({ where: { pvpEventId } });</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+    async findByPvPEventId(pvpEventId: string): Promise&lt;ExternalPlayersDisponibilityDb[]&gt; {
+        return await this.db.externalPlayersDisponibilityDb.findMany({ where: { pvpEventId } });
+    }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    async findByPvPEventIdAndDisponibility(pvpEventId: string, disponibility: number): Promise&lt;ExternalPlayersDisponibilityDb[]&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        return await this.db.externalPlayersDisponibilityDb.findMany({ where: { pvpEventId, disponibility } });</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
+    async findByPvPEventIdAndDisponibility(pvpEventId: string, disponibility: number): Promise&lt;ExternalPlayersDisponibilityDb[]&gt; {
+        return await this.db.externalPlayersDisponibilityDb.findMany({ where: { pvpEventId, disponibility } });
+    }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    async findByPvPEventIdAndDisponibilityYes(pvpEventId: string): Promise&lt;ExternalPlayersDisponibilityDb[]&gt; {</span>
+<span class="fstat-no" title="function not covered" >    async findByPvPEventIdAndDisponibilityYes(pvpEventId: string): Promise&lt;ExternalPlayersDisponibilityDb[]&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        return await this.db.externalPlayersDisponibilityDb.findMany({ where: { pvpEventId, disponibility: Disponibility.Yes } });</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    async deleteByPvPEventId(pvpEventId: string): Promise&lt;void&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        await this.db.externalPlayersDisponibilityDb.deleteMany({ where: { pvpEventId } });</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" >}</span></pre></td></tr></table></pre>
+    async deleteByPvPEventId(pvpEventId: string): Promise&lt;void&gt; {
+        await this.db.externalPlayersDisponibilityDb.deleteMany({ where: { pvpEventId } });
+    }
+}</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-21T15:16:53.447Z
+                at 2024-10-21T15:55:34.040Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
