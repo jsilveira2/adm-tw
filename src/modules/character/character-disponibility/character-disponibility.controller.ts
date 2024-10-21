@@ -1,11 +1,11 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { ExternalPlayersDisponibilityService } from './external-players-disponibility.service';
-import { externalPlayersDisponibilitySchema } from './schema';
+import { CharacterDisponibilityService } from './character-disponibility.service';
+import { characterDisponibilitySchema } from './schema';
 import { ControllerBase } from '../../base/base.controller';
 
-export class ExternalPlayersDisponibilityController extends ControllerBase<typeof externalPlayersDisponibilitySchema.shape> {
-    constructor(public readonly service: ExternalPlayersDisponibilityService) {
-        super(service, externalPlayersDisponibilitySchema);
+export class CharacterDisponibilityController extends ControllerBase<typeof characterDisponibilitySchema.shape> {
+    constructor(public readonly service: CharacterDisponibilityService) {
+        super(service, characterDisponibilitySchema);
     }
 
     async getByPvPEventId(request: FastifyRequest, reply: FastifyReply) {
@@ -18,7 +18,7 @@ export class ExternalPlayersDisponibilityController extends ControllerBase<typeo
             return reply.status(200).send(data);
         }
     }
-    
+
     async getByPvPEventIdAndDisponibilityYes(request: FastifyRequest, reply: FastifyReply) {
         const { pvpEventId } = request.params as { pvpEventId: string };
         if (!pvpEventId) {
@@ -38,6 +38,6 @@ export class ExternalPlayersDisponibilityController extends ControllerBase<typeo
 
         await this.service.deleteByPvPEventId(pvpEventId);
 
-        return reply.status(200).send({ message: 'PvP Event Disponibility deleted with success' });
+        return reply.status(200).send({ message: 'Character Disponibility deleted with success' });
     }
 }

@@ -28,6 +28,16 @@ export class ExternalPlayersDisponibilityService extends ServiceBase<ExternalPla
         return findData;
     }
 
+    async findByPvPEventIdAndDisponibilityYes(pvpEventId: string): Promise<ExternalPlayersDisponibilityDb[]> {
+        const findData = await this.repository.findByPvPEventIdAndDisponibilityYes(pvpEventId);
+        
+        if (!findData || findData.length === 0) {
+            throw new ErrorHelper(this.className, 'findByPvPEventIdAndDisponibilityYes', 'External Player Disponibility not found', 404);
+        }
+
+        return findData;
+    }
+
     async deleteByPvPEventId(pvpEventId: string): Promise<void> {
         await this.repository.deleteByPvPEventId(pvpEventId);
     }

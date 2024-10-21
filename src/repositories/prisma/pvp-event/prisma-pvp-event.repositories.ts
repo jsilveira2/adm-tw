@@ -6,7 +6,7 @@ import { prisma } from '../../../database/prisma';
 export class PrismaPvPEventRepositories extends PrismaBaseRepositories<PvPEventDb, string> implements IPvPEventRepositories {
 
     constructor() {
-        super(prisma, (client) => client.permissionsDb);
+        super(prisma, (client) => client.pvPEventDb);
     }
 
     async findByGuildId(guildId: string): Promise<PvPEventDb[]> {

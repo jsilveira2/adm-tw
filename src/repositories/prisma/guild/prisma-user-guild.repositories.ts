@@ -6,7 +6,7 @@ import { prisma } from '../../../database/prisma';
 export class PrismaUserGuildRepositories extends PrismaBaseRepositories<UserGuildsDb, string> implements IUserGuildRepositories {
 
     constructor() {
-        super(prisma, (client) => client.permissionsDb);
+        super(prisma, (client) => client.userGuildsDb);
     }
 
     async findByUserId(userId: string): Promise<UserGuildsDb[]> {

@@ -158,10 +158,10 @@ model CharacterClassesDb {
 model CharactersDb {
     id                   String    @id @default(uuid())
     nickname             String    @unique @db.VarChar(50)
-    obs                  String    @db.VarChar(255)
-    ownerName            String    @db.VarChar(50)
-    rank                 Int
-    defaultDisponibility Int
+    obs                  String?    @db.VarChar(255)
+    ownerName            String?    @db.VarChar(50)
+    rank                 Int?
+    defaultDisponibility Int?
     isActive             Boolean   @default(true)
     createdAt            DateTime? @default(now())
     updatedAt            DateTime? @updatedAt
@@ -221,7 +221,7 @@ model PvPEventPartyDb {
 
 model CharacterEventDisponibilityDb {
     id                   String    @id @default(uuid())
-    disponibility        Int
+    disponibility        Int?
     obs                  String    @db.VarChar(255)
     createdAt            DateTime? @default(now())
     updatedAt            DateTime? @updatedAt
@@ -232,8 +232,8 @@ model CharacterEventDisponibilityDb {
 	pvpEventId           String
     pvpEvent             PvPEventDb @relation(fields: [pvpEventId], references: [id], onDelete: Cascade)
 
-    externalPlayerId     String
-    externalPlayer       ExternalPlayersDb @relation(fields: [externalPlayerId], references: [id], onDelete: Cascade)
+    externalPlayerId     String?
+    externalPlayer       ExternalPlayersDb? @relation(fields: [externalPlayerId], references: [id], onDelete: Cascade)
 
     @@index([characterId])
     @@index([pvpEventId])

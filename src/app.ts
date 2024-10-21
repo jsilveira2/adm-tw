@@ -12,6 +12,8 @@ import { UserGuild } from './routes/guild/user-guild.routes';
 import { PvPEvent } from './routes/pvp-event/pvp-event.routes';
 import { ExternalPlayers } from './routes/external-players/external-players.route';
 import { ExternalPlayersDisponibility } from './routes/external-players/external-players-disponibility.route';
+import { Character } from './routes/character/character.route';
+import { CharacterDisponibility } from './routes/character/character-disponibility.route';
 
 export class App {
     public readonly server: FastifyInstance;
@@ -59,6 +61,8 @@ export class App {
         this.server.register(PvPEvent, { prefix: 'pvp-event' });
         this.server.register(ExternalPlayers, { prefix: 'external-players' });
         this.server.register(ExternalPlayersDisponibility, { prefix: 'external-players-disponibility' });
+        this.server.register(Character, { prefix: 'character' });
+        this.server.register(CharacterDisponibility, { prefix: 'character-disponibility' });
 
         this.server.get('/logout', async (req, reply) => {
             // Remove cookie 'access_token'

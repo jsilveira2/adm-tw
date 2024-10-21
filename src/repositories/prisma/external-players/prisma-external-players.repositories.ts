@@ -6,7 +6,7 @@ import { prisma } from '../../../database/prisma';
 export class PrismaExternalPlayersRepositories extends PrismaBaseRepositories<ExternalPlayersDb, string> implements IExternalPlayersRepositories {
 
     constructor() {
-        super(prisma, (client) => client.permissionsDb);
+        super(prisma, (client) => client.externalPlayersDb);
     }
 
     async findByGuildId(guildId: string): Promise<ExternalPlayersDb[]> {
