@@ -25,8 +25,8 @@ model UsersDb {
     loginAttempts Int           @default(0)
     isLocked      Boolean       @default(false)
 	
-    UserRolesDb   UserRolesDb[]
-	UserGuildsDb  UserGuildsDb[]
+    userRolesDb   UserRolesDb[]
+	userGuildsDb  UserGuildsDb[]
 
     @@index([email])
     @@map("users")
@@ -39,8 +39,8 @@ model RolesDb {
     createdAt     DateTime? @default(now())
     updatedAt     DateTime? @updatedAt
 
-    PermissionsDb PermissionsDb[]
-	UserRolesDb   UserRolesDb[] @relation(name: "RolesUser")
+    permissionsDb PermissionsDb[]
+	userRolesDb   UserRolesDb[] @relation(name: "RolesUser")
 
     @@map("roles")
 }
@@ -82,10 +82,10 @@ model GuildDb {
     createdAt         DateTime? @default(now())
     updatedAt         DateTime? @updatedAt
 
-	UserGuildsDb      UserGuildsDb[]
-    ExternalPlayersDb ExternalPlayersDb[]
-    CharactersDb      CharactersDb[]
-    PvPEventDb        PvPEventDb[]
+	userGuildsDb      UserGuildsDb[]
+    externalPlayersDb ExternalPlayersDb[]
+    charactersDb      CharactersDb[]
+    pvpEventDb        PvPEventDb[]
 
     @@map("guild")
 }
@@ -109,7 +109,7 @@ model UserGuildsDb {
 model ExternalPlayersDb {
     id        String    @id @default(uuid())
     name      String    @db.VarChar(50)
-    obs       String    @db.VarChar(255)
+    obs       String?   @db.VarChar(255)
     isActive  Boolean   @default(true)
     createdAt DateTime? @default(now())
     updatedAt DateTime? @updatedAt
@@ -117,17 +117,17 @@ model ExternalPlayersDb {
 	guildId   String
     guild     GuildDb @relation(fields: [guildId], references: [id], onDelete: Cascade)
 
-    ExternalPlayersDisponibilityDb ExternalPlayersDisponibilityDb[]
+    externalPlayersDisponibilityDb ExternalPlayersDisponibilityDb[]
 
     @@index([guildId])
     @@map("external_players")
-	CharacterEventDisponibilityDb CharacterEventDisponibilityDb[]
+	characterEventDisponibilityDb CharacterEventDisponibilityDb[]
 }
 
 model ExternalPlayersDisponibilityDb {
     id                   String    @id @default(uuid())
     disponibility        Int
-    obs                  String    @db.VarChar(255)
+    obs                  String?   @db.VarChar(255)
     createdAt            DateTime? @default(now())
     updatedAt            DateTime? @updatedAt
 
@@ -150,7 +150,7 @@ model CharacterClassesDb {
     isActive     Boolean   @default(true)
     createdAt    DateTime? @default(now())
 
-    CharactersDb CharactersDb[]
+    charactersDb CharactersDb[]
 
     @@map("character_classes")
 }
@@ -172,8 +172,8 @@ model CharactersDb {
 	guildId              String
     guild                GuildDb @relation(fields: [guildId], references: [id], onDelete: Cascade)
 
-    CharacterEventDisponibilityDb CharacterEventDisponibilityDb[]
-    PartyMembers PartyMembers[]
+    characterEventDisponibilityDb CharacterEventDisponibilityDb[]
+    partyMembersDb PartyMembersDb[]
 
     @@index([guildId])
     @@index([characterClassId])
@@ -195,9 +195,9 @@ model PvPEventDb {
 	guildId                     String
     guild                       GuildDb @relation(fields: [guildId], references: [id], onDelete: Cascade)
 
-    PvPEventPartyDb                PvPEventPartyDb[]
-    CharacterEventDisponibilityDb  CharacterEventDisponibilityDb[]
-    ExternalPlayersDisponibilityDb ExternalPlayersDisponibilityDb[]
+    pvpEventPartyDb                PvPEventPartyDb[]
+    characterEventDisponibilityDb  CharacterEventDisponibilityDb[]
+    externalPlayersDisponibilityDb ExternalPlayersDisponibilityDb[]
 
     @@index([guildId])
     @@map("pvp_event")
@@ -206,14 +206,14 @@ model PvPEventDb {
 model PvPEventPartyDb {
     id                   String    @id @default(uuid())
     name                 String    @db.VarChar(50)
-    obs                  String    @db.VarChar(255)
+    obs                  String?   @db.VarChar(255)
     createdAt            DateTime? @default(now())
     updatedAt            DateTime? @updatedAt
 
 	pvpEventId           String
     pvpEvent             PvPEventDb @relation(fields: [pvpEventId], references: [id], onDelete: Cascade)
 
-    PartyMembers         PartyMembers[]
+    partyMembersDb         PartyMembersDb[]
 
     @@index([pvpEventId])
     @@map("pvp_event_party")
@@ -222,7 +222,7 @@ model PvPEventPartyDb {
 model CharacterEventDisponibilityDb {
     id                   String    @id @default(uuid())
     disponibility        Int?
-    obs                  String    @db.VarChar(255)
+    obs                  String?   @db.VarChar(255)
     createdAt            DateTime? @default(now())
     updatedAt            DateTime? @updatedAt
 
@@ -243,12 +243,10 @@ model CharacterEventDisponibilityDb {
     @@map("character_event_disponibility")
 }
 
-model PartyMembers {
+model PartyMembersDb {
     id                   String    @id @default(uuid())
-    disponibility        Int
-    obs                  String    @db.VarChar(255)
-    createdAt            DateTime? @default(now())
-    updatedAt            DateTime? @updatedAt
+    partyLeader          Boolean?  @default(false)
+    obs                  String?   @db.VarChar(255)
 
 	characterId          String
     character            CharactersDb @relation(fields: [characterId], references: [id], onDelete: Cascade)
