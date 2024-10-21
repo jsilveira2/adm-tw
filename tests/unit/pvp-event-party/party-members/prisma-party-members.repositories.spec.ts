@@ -45,10 +45,54 @@ describe('PrismaPartyMembersRepositories', () => {
         expect(findManyMock).toHaveBeenCalledWith({ where: { pvpPartyId: 'party1' } });
     });
 
+    it('should return an empty array if no party members found by party ID', async () => {
+        findManyMock.mockResolvedValue([]);
+
+        const result = await repository.findByPartyId('party2');
+        expect(result).toEqual([]);
+        expect(findManyMock).toHaveBeenCalledWith({ where: { pvpPartyId: 'party2' } });
+    });
+
+    it('should find party members by character ID', async () => {
+        findManyMock.mockResolvedValue([mockPartyMember]);
+
+        const result = await repository.findByCharacterId('character1');
+        expect(result).toEqual([mockPartyMember]);
+        expect(findManyMock).toHaveBeenCalledWith({ where: { characterId: 'character1' } });
+    });
+
+    it('should return an empty array if no party members found by character ID', async () => {
+        findManyMock.mockResolvedValue([]);
+
+        const result = await repository.findByCharacterId('character2');
+        expect(result).toEqual([]);
+        expect(findManyMock).toHaveBeenCalledWith({ where: { characterId: 'character2' } });
+    });
+
     it('should delete party members by party ID', async () => {
         deleteManyMock.mockResolvedValue({ count: 1 });
 
         await repository.deleteByPartyId('party1');
         expect(deleteManyMock).toHaveBeenCalledWith({ where: { pvpPartyId: 'party1' } });
     });
+
+    it('should not throw an error if no party members are deleted', async () => {
+        deleteManyMock.mockResolvedValue({ count: 0 });
+
+        await expect(repository.deleteByPartyId('party2')).resolves.not.toThrow();
+        expect(deleteManyMock).toHaveBeenCalledWith({ where: { pvpPartyId: 'party2' } });
+    });
+
+    it('should throw an error when findByPartyId fails', async () => {
+        findManyMock.mockRejectedValue(new Error('Database error'));
+
+        await expect(repository.findByPartyId('party1')).rejects.toThrow('Database error');
+    });
+
+    it('should throw an error when deleteByPartyId fails', async () => {
+        deleteManyMock.mockRejectedValue(new Error('Database error'));
+
+        await expect(repository.deleteByPartyId('party1')).rejects.toThrow('Database error');
+    });
 });
+

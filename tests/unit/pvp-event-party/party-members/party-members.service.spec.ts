@@ -54,10 +54,25 @@ describe('PartyMembersService', () => {
         expect(mockRepository.findByCharacterId).toHaveBeenCalledWith('character1');
     });
 
+    it('should throw error when no party members found by character id', async () => {
+        mockRepository.findByCharacterId.mockResolvedValue([]);
+
+        await expect(service.findByCharacterId('non-existent-character')).rejects.toThrowError(
+            new ErrorHelper('PartyMembersService', 'findByCharacterId', 'Party Member not found', 404)
+        );
+    });
+
     it('should delete party members by party id', async () => {
         mockRepository.deleteByPartyId.mockResolvedValue(undefined);
 
         await service.deleteByPartyId('party1');
         expect(mockRepository.deleteByPartyId).toHaveBeenCalledWith('party1');
+    });
+
+    it('should not throw an error if deleteByPartyId is called and does not find any members', async () => {
+        mockRepository.deleteByPartyId.mockResolvedValue(undefined); // Simulate that deletion has been attempted
+
+        await expect(service.deleteByPartyId('non-existent-party')).resolves.not.toThrow();
+        expect(mockRepository.deleteByPartyId).toHaveBeenCalledWith('non-existent-party');
     });
 });

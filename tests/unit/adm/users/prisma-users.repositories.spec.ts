@@ -65,6 +65,22 @@ describe('PrismaUserRepositories', () => {
         userRepository = new PrismaUserRepositories();
     });
 
+    it('should find user by email', async () => {
+        findUniqueMock.mockResolvedValue(mockUser);
+
+        const result = await userRepository.findByEmail(mockUser.email);
+        expect(result).toEqual(mockUser);
+        expect(findUniqueMock).toHaveBeenCalledWith({ where: { email: mockUser.email } });
+    });
+
+    it('should return null if user does not exist by email', async () => {
+        findUniqueMock.mockResolvedValue(null);
+
+        const result = await userRepository.findByEmail('non-existent@example.com');
+        expect(result).toBeNull();
+        expect(findUniqueMock).toHaveBeenCalledWith({ where: { email: 'non-existent@example.com' } });
+    });
+
     it('should find user by id', async () => {
         const mockUser = { id: '1', email: 'test@example.com', name: 'Test User' };
 
@@ -158,5 +174,11 @@ describe('PrismaUserRepositories', () => {
         await userRepository.delete('1');
         expect(deleteMock).toHaveBeenCalledWith({ where: { id: '1' } });
     });
-});
+    
+    it('should handle errors when finding user by email', async () => {
+        findUniqueMock.mockRejectedValue(new Error('Database error'));
 
+        await expect(userRepository.findByEmail('error@example.com')).rejects.toThrow('Database error');
+        expect(findUniqueMock).toHaveBeenCalledWith({ where: { email: 'error@example.com' } });
+    });
+});
