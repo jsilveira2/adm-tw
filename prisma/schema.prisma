@@ -25,8 +25,9 @@ model UsersDb {
     loginAttempts Int           @default(0)
     isLocked      Boolean       @default(false)
 	
-    userRolesDb   UserRolesDb[]
-	userGuildsDb  UserGuildsDb[]
+    userRolesDb       UserRolesDb[]
+	userGuildsDb      UserGuildsDb[]
+    userPermissionsDb UserPermissionsDb[]
 
     @@index([email])
     @@map("users")
@@ -35,6 +36,7 @@ model UsersDb {
 model RolesDb {
     id            String    @id @default(uuid())
     name          String    @db.VarChar(50)
+    codeName      String    @db.VarChar(50)
     isActive      Boolean   @default(true)
     createdAt     DateTime? @default(now())
     updatedAt     DateTime? @updatedAt
@@ -48,12 +50,14 @@ model RolesDb {
 model PermissionsDb {
     id        String    @id @default(uuid())
     name      String    @db.VarChar(50)
+    codeName  String    @db.VarChar(50)
     isActive  Boolean   @default(true)
     createdAt DateTime? @default(now())
     updatedAt DateTime? @updatedAt
 
     roleId    String
     role      RolesDb   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+    userPermissionsDb UserPermissionsDb[] @relation(name: "RolesUser")
 
     @@index([roleId])
     @@map("permissions")
@@ -73,6 +77,22 @@ model UserRolesDb {
     @@index([userId])
     @@index([roleId])
     @@map("user_roles")
+}
+
+model UserPermissionsDb {
+    id        String @id @default(uuid())
+
+    userId    String
+    user      UsersDb @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    permissionId    String
+    permission      PermissionsDb @relation(fields: [permissionId], references: [id], onDelete: Cascade, name: "RolesUser")
+
+    createdAt DateTime? @default(now())
+
+    @@index([userId])
+    @@index([permissionId])
+    @@map("user_permissions")
 }
 
 model GuildDb {

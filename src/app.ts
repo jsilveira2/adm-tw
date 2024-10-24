@@ -16,6 +16,7 @@ import { Character } from './routes/character/character.route';
 import { CharacterDisponibility } from './routes/character/character-disponibility.route';
 import { PvPEventParty } from './routes/pvp-event/pvp-event-party.routes';
 import { PartyMembers } from './routes/pvp-event/pvp-event-party-members.route';
+import fastifyCors from '@fastify/cors';
 
 export class App {
     public readonly server: FastifyInstance;
@@ -35,13 +36,19 @@ export class App {
             secret: process.env.JWT_SECRET || 'supersecret'
         });
 
+        this.server.register(fastifyCors, {
+            origin: 'http://localhost:4200',
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            credentials: true,
+        });
+
         this.server.addHook('preValidation', async (req, reply) => {
             const { url } = req.raw;
-        
+
             if (url === '/login' || url === '/logout') {
                 return;
             }
-        
+
             try {
                 const token = req.cookies.access_token;
                 if (!token) {
