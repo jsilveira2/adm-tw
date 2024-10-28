@@ -2,6 +2,9 @@ import { FastifyInstance } from 'fastify';
 import { permissionFactory } from '../../modules/adm/permissions/permissions.factory';
 
 export async function Permissions(app: FastifyInstance) {
+	app.get('/', async (req, reply) => {
+		await permissionFactory.get(req, reply);
+	});
 	app.get('/:id', async (req, reply) => {
 		await permissionFactory.getById(req, reply);
 	});

@@ -38,7 +38,7 @@ export class App {
 
         this.server.register(fastifyCors, {
             origin: 'http://localhost:4200',
-            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
             credentials: true,
         });
 

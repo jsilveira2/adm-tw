@@ -1,5 +1,5 @@
 import { UsersDb } from '@prisma/client';
-import { User } from '../../../modules/adm/users/schema';
+import { User, UserUpdate } from '../../../modules/adm/users/schema';
 import { IUsersRepositories } from '../../../modules/adm/users/user.repositories';
 import { prisma } from '../../../database/prisma';
 
@@ -14,7 +14,12 @@ export class PrismaUserRepositories implements IUsersRepositories {
 
 	async findById(id: string): Promise<UsersDb | null> {
 		const user = await await this.db.findUnique({ where: { id } });
-		return user;
+		if (user) {
+			const { password, ...userWithoutPassword } = user;
+			return userWithoutPassword as UsersDb;
+		}
+
+		return null;
 	}
 
 	async exists(id: string): Promise<boolean> {
@@ -59,11 +64,15 @@ export class PrismaUserRepositories implements IUsersRepositories {
 		return user;
 	}
 
-	async update(attUser: User): Promise<Omit<UsersDb, 'password'>> {
+	async update(attUser: UserUpdate): Promise<Omit<UsersDb, 'password'>> {
 		const id = attUser.id;
+		const { password, ...data } = attUser;
+		const updateData = password
+        ? { ...data, password }
+        : data;
 		const user = await await this.db.update({
 			where: { id },
-			data: { ...attUser },
+			data: updateData,
 			select: {
 				id: true,
 				email: true,

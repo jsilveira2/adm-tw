@@ -15,6 +15,21 @@ export const userSchema = z.object({
 
 export type User = z.infer<typeof userSchema>;
 
+export const updateUserSchema = z.object({
+    id: string().uuid({ message: 'Invalid ID' }).optional(),
+    email: z.string().email({ message: 'Email inválido' }),
+    name: string().min(2, { message: 'invalid name length' }),
+    password: string().min(6, { message: 'invalid password length' }).optional().nullable(),
+    isActive: boolean().default(true),
+    createdAt: date().default(new Date()).nullable(),
+    updatedAt: date().default(new Date()).nullable(),
+    lastLogin: date().nullable().optional(),
+    loginAttempts: number().default(0),
+    isLocked: boolean().default(false)
+});
+
+export type UserUpdate = z.infer<typeof updateUserSchema>;
+
 export const emailSchema = z.object({
     email: z.string().email({ message: 'Email inválido' }),
 });

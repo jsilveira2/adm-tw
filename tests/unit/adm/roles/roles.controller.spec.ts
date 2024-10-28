@@ -52,7 +52,7 @@ describe('RolesController', () => {
     });
 
     it('should create a role successfully', async () => {
-        const newRole = { name: 'User' };
+        const newRole = { name: 'User', codeName: 'USER' };
         const createdRole = { id: uuidv4(), ...newRole };
         const request = mockRequest({}, newRole);
         mockService.create.mockResolvedValue(createdRole);
@@ -66,7 +66,7 @@ describe('RolesController', () => {
 
     it('should update a role successfully', async () => {
         const roleId = uuidv4();
-        const updatedRole: Role = { id: roleId, name: 'Updated Role' };
+        const updatedRole: Role = { id: roleId, name: 'Updated Role', codeName: 'USER' };
         const request = mockRequest({ id: roleId }, updatedRole);
         mockService.update.mockResolvedValue(updatedRole);
 

@@ -1,7 +1,7 @@
 import { ErrorHelper } from '../../../helpers/error-helper';
 import { UsersDb } from '@prisma/client';
 import { IUsersRepositories } from './user.repositories';
-import { User } from './schema';
+import { User, UserUpdate } from './schema';
 import bcrypt from 'bcrypt';
 
 export class UsersService {
@@ -45,14 +45,14 @@ export class UsersService {
 		return await this.repository.save(obj);
 	}
 
-	async update(id: string, obj: User): Promise<Omit<UsersDb, 'password'>> {
+	async update(id: string, obj: UserUpdate): Promise<Omit<UsersDb, 'password'>> {
 		const exists = await this.repository.exists(id);
 
 		if (!exists) {
 			throw new ErrorHelper(this.className, 'update', 'User not found', 404);
 		}
 
-		obj.updatedAt = new Date();
+		// obj.updatedAt = new Date();
 		if (obj.password) {
 			const password = await bcrypt.hash(obj.password, 10);
 			obj.password = password;
@@ -95,7 +95,7 @@ export class UsersService {
 		
 		const isValidPassword = await this.isValidPassword(password, user.password);
 		if (!isValidPassword) {
-		  throw new ErrorHelper('UsersService', 'login', 'Invalid credentials', 404);
+		  throw new ErrorHelper('UsersService', 'login', 'Invalid credentials', 401);
 		}
 	  
 		await this.repository.update({ ...user, lastLogin: new Date(), loginAttempts: 0 });

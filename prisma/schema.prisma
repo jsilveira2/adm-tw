@@ -25,9 +25,9 @@ model UsersDb {
     loginAttempts Int           @default(0)
     isLocked      Boolean       @default(false)
 	
-    userRolesDb       UserRolesDb[]
-	userGuildsDb      UserGuildsDb[]
-    userPermissionsDb UserPermissionsDb[]
+    userRoles       UserRolesDb[]
+	userGuilds      UserGuildsDb[]
+    userPermissions UserPermissionsDb[]
 
     @@index([email])
     @@map("users")
@@ -36,13 +36,13 @@ model UsersDb {
 model RolesDb {
     id            String    @id @default(uuid())
     name          String    @db.VarChar(50)
-    codeName      String    @db.VarChar(50)
+    codeName      String    @unique @db.VarChar(50)
     isActive      Boolean   @default(true)
     createdAt     DateTime? @default(now())
     updatedAt     DateTime? @updatedAt
 
-    permissionsDb PermissionsDb[]
-	userRolesDb   UserRolesDb[] @relation(name: "RolesUser")
+    permissions PermissionsDb[]
+	userRoles   UserRolesDb[] @relation(name: "RolesUser")
 
     @@map("roles")
 }
@@ -50,14 +50,14 @@ model RolesDb {
 model PermissionsDb {
     id        String    @id @default(uuid())
     name      String    @db.VarChar(50)
-    codeName  String    @db.VarChar(50)
+    codeName  String    @unique @db.VarChar(50)
     isActive  Boolean   @default(true)
     createdAt DateTime? @default(now())
     updatedAt DateTime? @updatedAt
 
     roleId    String
     role      RolesDb   @relation(fields: [roleId], references: [id], onDelete: Cascade)
-    userPermissionsDb UserPermissionsDb[] @relation(name: "RolesUser")
+    userPermissions UserPermissionsDb[] @relation(name: "RolesUser")
 
     @@index([roleId])
     @@map("permissions")
@@ -102,10 +102,10 @@ model GuildDb {
     createdAt         DateTime? @default(now())
     updatedAt         DateTime? @updatedAt
 
-	userGuildsDb      UserGuildsDb[]
-    externalPlayersDb ExternalPlayersDb[]
-    charactersDb      CharactersDb[]
-    pvpEventDb        PvPEventDb[]
+	userGuilds      UserGuildsDb[]
+    externalPlayers ExternalPlayersDb[]
+    characters      CharactersDb[]
+    pvpEvent        PvPEventDb[]
 
     @@map("guild")
 }
@@ -137,11 +137,11 @@ model ExternalPlayersDb {
 	guildId   String
     guild     GuildDb @relation(fields: [guildId], references: [id], onDelete: Cascade)
 
-    externalPlayersDisponibilityDb ExternalPlayersDisponibilityDb[]
+    externalPlayersDisponibility ExternalPlayersDisponibilityDb[]
+    characterEventDisponibility  CharacterEventDisponibilityDb[]
 
     @@index([guildId])
     @@map("external_players")
-	characterEventDisponibilityDb CharacterEventDisponibilityDb[]
 }
 
 model ExternalPlayersDisponibilityDb {
@@ -170,7 +170,7 @@ model CharacterClassesDb {
     isActive     Boolean   @default(true)
     createdAt    DateTime? @default(now())
 
-    charactersDb CharactersDb[]
+    characters CharactersDb[]
 
     @@map("character_classes")
 }
@@ -192,8 +192,8 @@ model CharactersDb {
 	guildId              String
     guild                GuildDb @relation(fields: [guildId], references: [id], onDelete: Cascade)
 
-    characterEventDisponibilityDb CharacterEventDisponibilityDb[]
-    partyMembersDb PartyMembersDb[]
+    characterEventDisponibility CharacterEventDisponibilityDb[]
+    partyMembers PartyMembersDb[]
 
     @@index([guildId])
     @@index([characterClassId])
@@ -216,8 +216,8 @@ model PvPEventDb {
     guild                       GuildDb @relation(fields: [guildId], references: [id], onDelete: Cascade)
 
     pvpEventPartyDb                PvPEventPartyDb[]
-    characterEventDisponibilityDb  CharacterEventDisponibilityDb[]
-    externalPlayersDisponibilityDb ExternalPlayersDisponibilityDb[]
+    characterEventDisponibility  CharacterEventDisponibilityDb[]
+    externalPlayersDisponibility ExternalPlayersDisponibilityDb[]
 
     @@index([guildId])
     @@map("pvp_event")
@@ -233,7 +233,7 @@ model PvPEventPartyDb {
 	pvpEventId           String
     pvpEvent             PvPEventDb @relation(fields: [pvpEventId], references: [id], onDelete: Cascade)
 
-    partyMembersDb         PartyMembersDb[]
+    partyMembers         PartyMembersDb[]
 
     @@index([pvpEventId])
     @@map("pvp_event_party")

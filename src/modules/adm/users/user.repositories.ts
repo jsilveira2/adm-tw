@@ -1,5 +1,5 @@
 import { UsersDb } from '@prisma/client';
-import { User } from './schema';
+import { User, UserUpdate } from './schema';
 
 export abstract class IUsersRepositories {
 	abstract findByEmail(email: string): Promise<UsersDb | null>;
@@ -7,6 +7,6 @@ export abstract class IUsersRepositories {
 	abstract exists(id: string): Promise<boolean>;
 	abstract findAll(): Promise<Omit<UsersDb, 'password'>[]>;
 	abstract save(user: User): Promise<Omit<UsersDb, 'password'>>;
-	abstract update(user: User): Promise<Omit<UsersDb, 'password'>>;
+	abstract update(user: UserUpdate): Promise<Omit<UsersDb, 'password'>>;
 	abstract delete(id: string): Promise<void>;
 }
