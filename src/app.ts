@@ -2,6 +2,7 @@ import fastify from 'fastify';
 import multipart from '@fastify/multipart';
 import { ErrorControllers } from './middleware/error';
 import { FastifyInstance } from 'fastify/types/instance';
+import fastifyCors from '@fastify/cors';
 import { config } from 'dotenv';
 import { Users, Login } from './routes/adm/users.routes';
 import { Roles } from './routes/adm/roles.routes';
@@ -16,7 +17,7 @@ import { Character } from './routes/character/character.route';
 import { CharacterDisponibility } from './routes/character/character-disponibility.route';
 import { PvPEventParty } from './routes/pvp-event/pvp-event-party.routes';
 import { PartyMembers } from './routes/pvp-event/pvp-event-party-members.route';
-import fastifyCors from '@fastify/cors';
+import { UserPermissions } from './routes/adm/user-permissions.routes';
 
 export class App {
     public readonly server: FastifyInstance;
@@ -65,6 +66,7 @@ export class App {
         this.server.register(Roles, { prefix: 'roles' });
         this.server.register(Permissions, { prefix: 'permissions' });
         this.server.register(UserRoles, { prefix: 'user-roles' });
+        this.server.register(UserPermissions, { prefix: 'user-permissions' });
         this.server.register(Guild, { prefix: 'guild' });
         this.server.register(UserGuild, { prefix: 'user-guild' });
         this.server.register(PvPEvent, { prefix: 'pvp-event' });

@@ -3,19 +3,28 @@ import { IBaseRepositories } from '../../../modules/base/base.repositories';
 
 export abstract class PrismaBaseRepositories<T, K> implements IBaseRepositories<T, K> {
     protected db: PrismaClient;
-    protected modelName: (client: PrismaClient) => { findMany: () => Promise<T[]>; findUnique: (args: { where: { id: K } }) => Promise<T | null>; create: (args: { data: T }) => Promise<T>; update: (args: { where: { id: K }, data: T }) => Promise<T>; delete: (args: { where: { id: K } }) => Promise<void>; };
+    protected modelName: (client: PrismaClient) => {
+        findMany: (args?: { include?: any }) => Promise<T[]>;
+        findUnique: (args: { where: { id: K }, include?: any }) => Promise<T | null>;
+        create: (args: { data: T }) => Promise<T>;
+        update: (args: { where: { id: K }, data: T }) => Promise<T>;
+        delete: (args: { where: { id: K } }) => Promise<void>;
+    };
 
     constructor(prismaClient: PrismaClient, modelName: (client: PrismaClient) => any) {
         this.db = prismaClient;
         this.modelName = modelName;
     }
 
-    async findAll(): Promise<T[]> {
-        return await this.modelName(this.db).findMany();
+    async findAll(include?: any): Promise<T[]> {
+        return await this.modelName(this.db).findMany({ include });
     }
 
-    async findById(id: K): Promise<T | null> {
-        return await this.modelName(this.db).findUnique({ where: { id } });
+    async findById(id: K, include?: any): Promise<T | null> {
+        return await this.modelName(this.db).findUnique({
+            where: { id },
+            include
+        });
     }
 
     async save(obj: T): Promise<T> {

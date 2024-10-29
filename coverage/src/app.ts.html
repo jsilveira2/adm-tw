@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/75</span>
+                <span class='fraction'>0/81</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/75</span>
+                <span class='fraction'>0/81</span>
             </div>
         
             
@@ -151,7 +151,14 @@
 <a name='L86'></a><a href='#L86'>86</a>
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -169,6 +176,21 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -176,14 +198,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -257,6 +271,7 @@ import { FastifyInstance } from 'fastify/types/instance';
 <span class="cstat-no" title="statement not covered" >import { CharacterDisponibility } from './routes/character/character-disponibility.route';</span>
 <span class="cstat-no" title="statement not covered" >import { PvPEventParty } from './routes/pvp-event/pvp-event-party.routes';</span>
 <span class="cstat-no" title="statement not covered" >import { PartyMembers } from './routes/pvp-event/pvp-event-party-members.route';</span>
+<span class="cstat-no" title="statement not covered" >import fastifyCors from '@fastify/cors';</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export class App {</span>
 <span class="cstat-no" title="statement not covered" >    public readonly server: FastifyInstance;</span>
@@ -276,13 +291,19 @@ import { FastifyInstance } from 'fastify/types/instance';
 <span class="cstat-no" title="statement not covered" >            secret: process.env.JWT_SECRET || 'supersecret'</span>
 <span class="cstat-no" title="statement not covered" >        });</span>
 &nbsp;
+<span class="cstat-no" title="statement not covered" >        this.server.register(fastifyCors, {</span>
+<span class="cstat-no" title="statement not covered" >            origin: 'http://localhost:4200',</span>
+<span class="cstat-no" title="statement not covered" >            methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],</span>
+<span class="cstat-no" title="statement not covered" >            credentials: true,</span>
+<span class="cstat-no" title="statement not covered" >        });</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >        this.server.addHook('preValidation', async (req, reply) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >            const { url } = req.raw;</span>
-        
+&nbsp;
 <span class="cstat-no" title="statement not covered" >            if (url === '/login' || url === '/logout') {</span>
 <span class="cstat-no" title="statement not covered" >                return;</span>
 <span class="cstat-no" title="statement not covered" >            }</span>
-        
+&nbsp;
 <span class="cstat-no" title="statement not covered" >            try {</span>
 <span class="cstat-no" title="statement not covered" >                const token = req.cookies.access_token;</span>
 <span class="cstat-no" title="statement not covered" >                if (!token) {</span>
@@ -334,7 +355,7 @@ import { FastifyInstance } from 'fastify/types/instance';
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-21T18:43:22.545Z
+                at 2024-10-28T12:48:33.979Z
             </div>
         <script src="../prettify.js"></script>
         <script>
