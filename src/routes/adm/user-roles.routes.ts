@@ -14,6 +14,9 @@ export async function UserRoles(app: FastifyInstance) {
 	app.post('/', async (req, reply) => {
 		await userRolesFactory.create(req, reply);
 	});
+	app.post('/createMany', async (req, reply) => {
+		await userRolesFactory.createMany(req, reply);
+	});
 	app.delete('/:id', async (req, reply) => {
 		await userRolesFactory.delete(req, reply);
 	});

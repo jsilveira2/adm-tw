@@ -7,4 +7,7 @@ export const userRolesSchema = z.object({
     roleId: string().uuid({ message: 'Invalid Role ID' })
 });
 
+export const userRolesArraySchema = z.array(userRolesSchema);
+
 export type UserRoles = z.infer<typeof userRolesSchema>;
+export type UserRolesArray = z.infer<typeof userRolesArraySchema>;

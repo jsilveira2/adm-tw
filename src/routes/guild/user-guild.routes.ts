@@ -14,4 +14,7 @@ export async function UserGuild(app: FastifyInstance) {
     app.delete('/guildId/:guildId', async (req, reply) => {
 		await userGuildFactory.deleteByGuildId(req, reply);
 	});
+	app.post('/createMany', async (req, reply) => {
+		await userGuildFactory.createMany(req, reply);
+	});
 }

@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { UserGuildService } from './user-guild.service';
-import { userGuildSchema } from './schema';
+import { userGuildArraySchema, userGuildSchema } from './schema';
 import { ControllerBase } from '../../base/base.controller';
 
 export class UserGuildController extends ControllerBase<typeof userGuildSchema.shape> {
@@ -50,5 +50,11 @@ export class UserGuildController extends ControllerBase<typeof userGuildSchema.s
         await this.service.deleteByGuildId(guildId);
 
         return reply.status(200).send({ message: 'UserGuild deleted with success' });
+    }
+
+    async createMany(request: FastifyRequest, reply: FastifyReply) {
+        const obj = userGuildArraySchema.parse(request.body);
+        const data = await this.service.createMany(obj);
+        return reply.status(201).send(data);
     }
 }

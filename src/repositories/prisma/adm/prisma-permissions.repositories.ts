@@ -16,4 +16,10 @@ export class PrismaPermissionsRepositories extends PrismaBaseRepositories<Permis
     async deleteByRoleId(roleId: string): Promise<void> {
         await this.db.permissionsDb.deleteMany({ where: { roleId } });
     }
+
+    async findByRoleIds(roleIds: string[]): Promise<PermissionsDb[]> {
+        return await this.db.permissionsDb.findMany({ where: { roleId: {
+            in: roleIds
+        }}});
+    }
 }

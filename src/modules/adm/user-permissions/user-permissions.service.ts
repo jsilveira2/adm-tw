@@ -2,6 +2,7 @@ import { ErrorHelper } from '../../../helpers/error-helper';
 import { UserPermissionsDb } from '@prisma/client';
 import { IUserPermissionsRepositories } from './user-permissions.repositories';
 import { ServiceBase } from '../../base/base.service';
+import { UserPermissions } from './schema';
 
 export class UserPermissionsService extends ServiceBase<UserPermissionsDb, string> {
     constructor(public readonly repository: IUserPermissionsRepositories) {
@@ -34,5 +35,24 @@ export class UserPermissionsService extends ServiceBase<UserPermissionsDb, strin
 
     async deleteByPermissionId(permissionId: string): Promise<void> {
         await this.repository.deleteByPermissionId(permissionId);
+    }
+
+    async createMany(obj: UserPermissions[]): Promise<UserPermissionsDb[]> {
+        if (obj && obj.length > 0) {
+            const userId = obj[0].userId;
+            if (!userId) {
+                throw new ErrorHelper(this.className, 'createMany', 'Invalid User ID', 400);
+            }
+
+            await this.deleteByUserId(userId);
+            const data = await this.repository.createMany(obj);
+            if (!data) {
+                throw new ErrorHelper(this.className, 'createMany', 'Fail to create UserRole', 400);
+            }
+
+            return data;
+        } else {
+            throw new ErrorHelper(this.className, 'createMany', 'Missing objects to save', 400);
+        }
     }
 }

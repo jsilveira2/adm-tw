@@ -27,22 +27,27 @@ export class PrismaUserRepositories implements IUsersRepositories {
 		return !!user;
 	}
 
-	async findAll(): Promise<Omit<UsersDb, 'password'>[]> {
-		const users = await await this.db.findMany({
-			select: {
-				id: true,
-				email: true,
-				name: true,
-				isActive: true,
-				createdAt: true,
-				updatedAt: true,
-				lastLogin: true,
-				loginAttempts: true,
-				isLocked: true,
-			},
-		});
+	async findAll(onlyActives: boolean = true): Promise<Omit<UsersDb, 'password'>[]> {
+		const select = {
+			id: true,
+			email: true,
+			name: true,
+			isActive: true,
+			createdAt: true,
+			updatedAt: true,
+			lastLogin: true,
+			loginAttempts: true,
+			isLocked: true,
+		};
 
-		return users;
+		if (!onlyActives) {
+			return await this.db.findMany({select});
+		}
+
+		return await this.db.findMany({
+			where: { isActive: true },
+			select
+		});
 	}
 
 	async save(newUser: User): Promise<Omit<UsersDb, 'password'>> {

@@ -2,6 +2,7 @@ import { UserPermissionsDb } from '@prisma/client';
 import { IUserPermissionsRepositories } from '../../../modules/adm/user-permissions/user-permissions.repositories';
 import { PrismaBaseRepositories } from '../base/prisma-base.repositories';
 import { prisma } from '../../../database/prisma';
+import { UserPermissions } from '../../../modules/adm/user-permissions/schema';
 
 export class PrismaUserPermissionsRepositories extends PrismaBaseRepositories<UserPermissionsDb, string> implements IUserPermissionsRepositories {
 
@@ -31,5 +32,20 @@ export class PrismaUserPermissionsRepositories extends PrismaBaseRepositories<Us
 
     async deleteByPermissionId(permissionId: string): Promise<void> {
         await this.db.userPermissionsDb.deleteMany({ where: { permissionId } });
+    }
+
+    async createMany(obj: UserPermissions[]): Promise<UserPermissionsDb[]> {
+        const data = await this.db.userPermissionsDb.createMany({
+            data: obj.map(userPermission => ({
+                userId: userPermission.userId,
+                permissionId: userPermission.permissionId
+            })),
+        });
+
+        const createdPermissions = await this.db.userPermissionsDb.findMany({
+            where: { userId: obj[0].userId }
+        });
+
+        return createdPermissions;
     }
 }

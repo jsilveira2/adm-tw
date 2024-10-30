@@ -52,7 +52,7 @@ describe('PrismaUserRolesRepositories', () => {
 
         const result = await userRolesRepository.findByUserId(mockUserRole.userId);
         expect(result).toEqual(mockUserRoles);
-        expect(findManyMock).toHaveBeenCalledWith({ where: { userId: mockUserRole.userId } });
+        expect(findManyMock).toHaveBeenCalledWith({ where: { userId: mockUserRole.userId }, include: { role: true } });
     });
 
     it('should find user roles by roleId', async () => {

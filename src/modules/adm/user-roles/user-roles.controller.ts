@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { UserRolesService } from './user-roles.service';
-import { userRolesSchema } from './schema';
+import { userRolesSchema, userRolesArraySchema } from './schema';
 import { ControllerBase } from '../../base/base.controller';
 
 export class UserRolesController extends ControllerBase<typeof userRolesSchema.shape> {
@@ -50,5 +50,11 @@ export class UserRolesController extends ControllerBase<typeof userRolesSchema.s
         await this.service.deleteByRoleId(roleId);
 
         return reply.status(200).send({ message: 'UserRole deleted with success' });
+    }
+
+    async createMany(request: FastifyRequest, reply: FastifyReply) {
+        const obj = userRolesArraySchema.parse(request.body);
+        const data = await this.service.createMany(obj);
+        return reply.status(201).send(data);
     }
 }

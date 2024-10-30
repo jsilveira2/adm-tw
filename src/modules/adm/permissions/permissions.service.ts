@@ -21,4 +21,14 @@ export class PermissionsService extends ServiceBase<PermissionsDb, string> {
     async deleteByRoleId(roleId: string): Promise<void> {
         await this.repository.deleteByRoleId(roleId);
     }
+
+    async findByRoleIds(roleIds: string[]): Promise<PermissionsDb[]> {
+        const findData = await this.repository.findByRoleIds(roleIds);
+
+        if (!findData || findData.length === 0) {
+            throw new ErrorHelper(this.className, 'findByIds', 'Permissions not found', 404);
+        }
+
+        return findData;
+    }
 }
